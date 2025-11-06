@@ -1,0 +1,10 @@
+{
+    "scripts": {
+        "start": "concurrently \"yarn server\" \"yarn client\"",
+        "server": "yarn --cwd backend dev",
+        "client": "yarn --cwd frontend dev"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.1"
+    }
+}
