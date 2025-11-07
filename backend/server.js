@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import productRouter from "./router/productRouter.js";
+import userRouter from "./router/userRouter.js";
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ connection.once("open", () => {
 const PORT = 5001;
 
 app.use("/api/products", productRouter);
+app.use("/api/user", userRouter);
 
 app.get("/", (req, res) => {
     res.json({ status: 200, message: "Hello from mock cart" });

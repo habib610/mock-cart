@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BASE_URL } from "../../constant/routes";
 import ProductCard from "./ProductCard";
 
 const ProductList = () => {
@@ -6,7 +7,7 @@ const ProductList = () => {
     useEffect(() => {
         const loadProducts = async () => {
             try {
-                let res = await fetch("http://localhost:5001/api/products", {
+                let res = await fetch(`${BASE_URL}/products`, {
                     method: "GET",
                 });
                 let data = await res.json();
