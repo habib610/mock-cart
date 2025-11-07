@@ -4,6 +4,7 @@ import Button from "../../components/ui/Button";
 
 const CartCard = ({ cart }) => {
     const product = cart?.product || {};
+
     return (
         <div className="flex justify-between border border-gray-200 rounded-sm shadow-xs mb-3 py-1  lg:py-1 lg:px-2 gap-4">
             <div className="h-20 w-20 bg-gray-50 border border-gray-100">

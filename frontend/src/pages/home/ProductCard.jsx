@@ -1,6 +1,14 @@
 import Button from "../../components/ui/Button";
+import useAppContext from "../../hooks/useAppContext";
 
 const ProductCard = ({ product }) => {
+    const { state } = useAppContext();
+    console.log(state?.user?.cart);
+
+    const checkIsAlreadyAdded = () => {
+        return state?.user?.cart.find((item) => item.productId === product._id);
+    };
+    let isAllowed = state?.user ? checkIsAlreadyAdded() : false;
     return (
         <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group flex flex-col justify-between">
             <div className="relative overflow-hidden">
@@ -27,8 +35,14 @@ const ProductCard = ({ product }) => {
                     ${product.price.toFixed(2)}
                 </p>
 
-                <Button className="mt-3 w-full rounded-xl transition">
-                    Add to Cart
+                <Button
+                    className={
+                        !isAllowed
+                            ? "mt-3 w-full rounded-xl transition"
+                            : "bg-gray-200 text-gray-400 hover:cursor-not-allowed w-full mt-3 hover:bg-gray-200"
+                    }
+                >
+                    {!isAllowed ? "Add to Cart" : "Added"}
                 </Button>
             </div>
         </div>
