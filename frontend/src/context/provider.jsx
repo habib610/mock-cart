@@ -1,8 +1,7 @@
-import { createContext, useReducer } from "react";
+import { useReducer } from "react";
+import { Context } from "./context";
 import { reducer } from "./reducer";
 import store from "./store";
-
-export const Context = createContext();
 
 const ContextProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, store);

@@ -25,9 +25,10 @@ const Cart = () => {
                 {/* <h1 className="text-4xl">Cart</h1> */}
                 <div className="flex justify-between lg:justify-around gap-4 flex-wrap">
                     <div className="w-full md:w-6/12 lg:w-7/12  xl:w-6/12 ">
-                        {cart.map((item) => (
-                            <CartCard key={item._id} cart={item} />
-                        ))}
+                        {cart.length &&
+                            cart.map((item) => (
+                                <CartCard key={item._id} cart={item} />
+                            ))}
                     </div>
 
                     <div className="w-full md:w-5/12 lg:w-4/12 xl:w-4/12  ">

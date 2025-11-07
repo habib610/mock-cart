@@ -1,6 +1,6 @@
 const store = {
     user: null,
-    cart: [],
+    loading: false,
 };
 
 export default store;
