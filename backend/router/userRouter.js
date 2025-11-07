@@ -2,6 +2,7 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import { mapUserToUserResponse } from "../services/index.js";
 
 const userRouter = express.Router();
 
@@ -29,19 +30,7 @@ userRouter.post(
                 .status(400)
                 .send({ message: "Invalid email or password" });
 
-        let response = {
-            _id: user._id,
-            name: user.name,
-            email: user.email,
-            cart: user.cart.map((product) => ({
-                productId: product.product._id,
-                name: product.product.name,
-                image: product.product.image,
-                price: product.product.price,
-                qty: product.qty,
-            })),
-        };
-        return res.send(response);
+        return res.send(mapUserToUserResponse(user));
     })
 );
 userRouter.post(
@@ -82,20 +71,129 @@ userRouter.post(
 
         await savedUser.populate("cart.product", "name image price");
 
-        const response = {
-            _id: savedUser._id,
-            name: savedUser.name,
-            email: savedUser.email,
-            cart: savedUser.cart.map((item) => ({
-                productId: item.product._id,
-                name: item.product.name,
-                image: item.product.image,
-                price: item.product.price,
-                qty: item.qty,
-            })),
-        };
+        res.send(mapUserToUserResponse(savedUser));
+    })
+);
+userRouter.put(
+    "/cart/increment",
+    expressAsyncHandler(async (req, res) => {
+        const body = req.body;
 
-        res.send(response);
+        if (!body.productId || !body.userId)
+            return res
+                .status(400)
+                .send({ message: "ProductId or userId is missing" });
+
+        const user = await User.findById(body.userId).populate(
+            "cart.product",
+            "name image price"
+        );
+
+        if (!user) return res.status(404).send({ message: "User not found" });
+
+        const product = await Product.findById(body.productId);
+        if (!product)
+            return res.status(404).send({ message: "Product not found" });
+
+        const isExisting = user.cart.find(
+            (cartItem) =>
+                cartItem.product &&
+                cartItem.product._id.toString() === body.productId
+        );
+
+        if (!isExisting)
+            return res
+                .status(400)
+                .send({ message: "Product is not exists in cart" });
+
+        isExisting.qty += 1;
+
+        const savedUser = await user.save();
+
+        await savedUser.populate("cart.product", "name image price");
+
+        res.send(mapUserToUserResponse(savedUser));
+    })
+);
+userRouter.put(
+    "/cart/decrement",
+    expressAsyncHandler(async (req, res) => {
+        const body = req.body;
+
+        if (!body.productId || !body.userId)
+            return res
+                .status(400)
+                .send({ message: "ProductId or userId is missing" });
+
+        const user = await User.findById(body.userId).populate(
+            "cart.product",
+            "name image price"
+        );
+
+        if (!user) return res.status(404).send({ message: "User not found" });
+
+        const product = await Product.findById(body.productId);
+        if (!product)
+            return res.status(404).send({ message: "Product not found" });
+
+        const itemIndex = user.cart.findIndex(
+            (c) => c.product?._id?.toString() === body.productId.toString()
+        );
+        if (itemIndex === -1)
+            return res
+                .status(400)
+                .send({ message: "Product is not exists in cart" });
+
+        if (user.cart[itemIndex].qty > 1) {
+            user.cart[itemIndex].qty -= 1;
+        } else {
+            user.cart.splice(itemIndex, 1);
+        }
+
+        const savedUser = await user.save();
+
+        await savedUser.populate("cart.product", "name image price");
+
+        res.send(mapUserToUserResponse(savedUser));
+    })
+);
+
+userRouter.delete(
+    "/cart/remove",
+    expressAsyncHandler(async (req, res) => {
+        const body = req.body;
+
+        if (!body.productId || !body.userId)
+            return res
+                .status(400)
+                .send({ message: "ProductId or userId is missing" });
+
+        const user = await User.findById(body.userId).populate(
+            "cart.product",
+            "name image price"
+        );
+
+        if (!user) return res.status(404).send({ message: "User not found" });
+
+        const product = await Product.findById(body.productId);
+        if (!product)
+            return res.status(404).send({ message: "Product not found" });
+
+        const itemIndex = user.cart.findIndex(
+            (c) => c.product?._id?.toString() === body.productId.toString()
+        );
+        if (itemIndex === -1)
+            return res
+                .status(400)
+                .send({ message: "Product is not exists in cart" });
+
+        user.cart.splice(itemIndex, 1);
+
+        const savedUser = await user.save();
+
+        await savedUser.populate("cart.product", "name image price");
+
+        res.send(mapUserToUserResponse(savedUser));
     })
 );
 
