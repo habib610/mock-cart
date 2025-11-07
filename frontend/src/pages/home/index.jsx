@@ -2,7 +2,7 @@ import ProductList from "./ProductList";
 
 const Home = () => {
     return (
-        <div className="pt-15">
+        <div className="app-top-space">
             <ProductList />
         </div>
     );

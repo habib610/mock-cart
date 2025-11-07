@@ -4,4 +4,8 @@
     .app-container {
         @apply container mx-auto px-4;
     }
+
+    .app-top-space {
+        @apply pt-20 lg:pt-15 xl:pt-30;
+    }
 }

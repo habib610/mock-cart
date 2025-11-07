@@ -1,3 +1,7 @@
+import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
+
+import Button from "../../components/ui/Button";
+
 const CartCard = () => {
     return (
         <div className="flex justify-between border border-gray-200 rounded-sm shadow-xs mb-3 py-1  lg:py-1 lg:px-2 gap-4">
@@ -9,18 +13,20 @@ const CartCard = () => {
                 />
             </div>
             <div className="flex-1">
-                <h2 className="text-xl font-bold">Product name</h2>
+                <h2 className="text-lg lg:text-xl font-bold">Product name</h2>
 
                 <div className="flex justify-between items-center">
-                    <p className="text-orange-400 text-2xl">$123</p>
+                    <p className="text-orange-400 text-base md:text-lg lg:text-2xl">
+                        $123
+                    </p>
                     <div className="flex justify-between items-center">
-                        <button className="bg-purple-500 px-2 py-1 text-white rounded-md">
-                            -
-                        </button>
-                        <div className="text-sm px-2 py-1">1</div>
-                        <button className="bg-purple-500 px-2 py-1 text-white rounded-md">
-                            +
-                        </button>
+                        <Button className="py-1">
+                            <IoRemoveCircleOutline />
+                        </Button>
+                        <div className="text-base px-2 py-1 lg:text-2xl">1</div>
+                        <Button className="py-1">
+                            <IoAddCircleOutline />
+                        </Button>
                     </div>
                 </div>
             </div>
