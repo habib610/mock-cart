@@ -18,3 +18,18 @@ export const validateLogin = (data) => {
     }
     return errors;
 };
+
+export const validateCheckoutForm = (data) => {
+    const errors = {};
+
+    if (!data.email.trim()) {
+        errors.email = "Email is required";
+    } else if (!emailRegEx.test(data.email)) {
+        errors.email = "Invalid email format";
+    }
+
+    if (!data.name) {
+        errors.name = "Name is required";
+    }
+    return errors;
+};

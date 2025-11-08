@@ -13,7 +13,7 @@ const ProductList = () => {
                 let data = await res.json();
                 setProducts(data);
             } catch (error) {
-                console.log(error);
+                alert(error.message || "Something went wrong");
             }
         };
         loadProducts();

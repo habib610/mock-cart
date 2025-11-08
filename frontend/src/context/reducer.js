@@ -1,4 +1,5 @@
 import {
+    PAYMENT_CHECKOUT,
     RESET_LOADER,
     SET_LOADER,
     UPDATE_CART,
@@ -18,6 +19,9 @@ export const reducer = (state, action) => {
         case RESET_LOADER:
             return { ...state, loading: false };
         case UPDATE_CART:
+            return { ...state, user: action.payload };
+
+        case PAYMENT_CHECKOUT:
             return { ...state, user: action.payload };
         default:
             return state;

@@ -212,4 +212,49 @@ userRouter.get(
     })
 );
 
+userRouter.post(
+    "/checkout",
+    expressAsyncHandler(async (req, res) => {
+        const body = await req.body;
+
+        if (!body.name || !body.email || !body.userId)
+            return res
+                .status(400)
+                .send({ message: "Card or user info is missing" });
+
+        const user = await User.findById(body.userId).populate(
+            "cart.product",
+            "name image price"
+        );
+        if (!user)
+            return res.status(404).send({ message: "User is not found" });
+
+        if (user.cart.length === 0)
+            return res
+                .status(404)
+                .send({ message: "User has no items in cart" });
+
+        let invoiceAmount = user.cart.reduce(
+            (prev, curr) => (prev += curr.product.price * curr.qty),
+            0
+        );
+        let invoiceCart = user.cart.map((item) => ({
+            productId: item.product._id,
+            name: item.product.name,
+            price: item.product.price * item.qty,
+            qty: item.qty,
+        }));
+
+        user.cart = [];
+
+        let savedUser = await user.save();
+
+        return res.send({
+            user: mapUserToUserResponse(savedUser),
+            invoiceAmount,
+            invoiceCart,
+        });
+    })
+);
+
 export default userRouter;
