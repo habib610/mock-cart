@@ -86,3 +86,7 @@ password: 12345
 ### Invoice Summary
 
 ![Summary Modal](./demo/invoice.png)
+
+### Overview Video
+
+[![Watch the demo video](./demo/home.png)](./demo/mock_cart.mkv)
