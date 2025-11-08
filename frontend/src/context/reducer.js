@@ -1,4 +1,10 @@
-import { RESET_LOADER, SET_LOADER, USER_LOGIN, USER_LOGOUT } from "./actions";
+import {
+    RESET_LOADER,
+    SET_LOADER,
+    UPDATE_CART,
+    USER_LOGIN,
+    USER_LOGOUT,
+} from "./actions";
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -11,6 +17,8 @@ export const reducer = (state, action) => {
             return { ...state, loading: true };
         case RESET_LOADER:
             return { ...state, loading: false };
+        case UPDATE_CART:
+            return { ...state, user: action.payload };
         default:
             return state;
     }

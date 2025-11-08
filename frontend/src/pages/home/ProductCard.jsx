@@ -1,14 +1,21 @@
 import Button from "../../components/ui/Button";
+import { ADD_TO_CART_ENDPOINT } from "../../constant/routes";
 import useAppContext from "../../hooks/useAppContext";
+import useCartNetwork from "../../hooks/useCartNetwork";
 
 const ProductCard = ({ product }) => {
     const { state } = useAppContext();
-    console.log(state?.user?.cart);
+    const { handleUpdateCart } = useCartNetwork();
 
     const checkIsAlreadyAdded = () => {
         return state?.user?.cart.find((item) => item.productId === product._id);
     };
     let isAllowed = state?.user ? checkIsAlreadyAdded() : false;
+
+    const addToCart = (productId) => {
+        handleUpdateCart(productId, ADD_TO_CART_ENDPOINT, "POST");
+    };
+
     return (
         <div className="bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group flex flex-col justify-between">
             <div className="relative overflow-hidden">
@@ -36,6 +43,7 @@ const ProductCard = ({ product }) => {
                 </p>
 
                 <Button
+                    onClick={!isAllowed ? () => addToCart(product._id) : null}
                     className={
                         !isAllowed
                             ? "mt-3 w-full rounded-xl transition"
